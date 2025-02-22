@@ -99,6 +99,20 @@
     #audioPlayer {
       display: none;
     }
+
+    /* إضافة زر للتحكم بالصوت */
+    #soundControl {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: #ff1493;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
@@ -107,27 +121,28 @@
   <div class="center-point"></div>
   <div id="message">هدية زواجنا من زوجك أبو محمد ❤️</div>
   
-  <!-- مشغل الصوت -->
+  <button id="soundControl">▶️ تشغيل الصوت</button>
+  
+  <!-- تم تحديث مسار الصوت ليستخدم الملف المحلي -->
   <audio id="audioPlayer">
-    <source src="https://i.top4top.io/m_3340pzh8q0.mp3" type="audio/mp3">
+    <source src="./meme.mp3" type="audio/mp3">
   </audio>
 
   <script>
     const audio = document.getElementById('audioPlayer');
+    const soundControl = document.getElementById('soundControl');
     let animationRunning = true;
 
-    // تشغيل الصوت عند تحميل الصفحة
-    window.onload = function() {
-      // محاولة تشغيل الصوت تلقائياً
-      audio.play().catch(function(error) {
-        console.log("لم نتمكن من تشغيل الصوت تلقائياً. يرجى النقر على الصفحة للتشغيل.");
-      });
-
-      // تشغيل الصوت عند النقر على الصفحة (في حال منع التشغيل التلقائي)
-      document.body.addEventListener('click', function() {
+    // التحكم بالصوت
+    soundControl.addEventListener('click', function() {
+      if (audio.paused) {
         audio.play();
-      }, { once: true });
-    };
+        this.textContent = "⏸️ إيقاف الصوت";
+      } else {
+        audio.pause();
+        this.textContent = "▶️ تشغيل الصوت";
+      }
+    });
 
     // إعادة تشغيل الصوت عند انتهائه
     audio.addEventListener('ended', function() {
@@ -178,10 +193,6 @@
       setTimeout(() => {
         const message = document.getElementById('message');
         message.style.display = 'block';
-        
-        // إعادة تشغيل الصوت عند ظهور الرسالة
-        audio.currentTime = 0;
-        audio.play();
       }, 1000);
     }, 10000);
   </script>
